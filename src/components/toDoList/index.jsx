@@ -1,37 +1,50 @@
-import { Typography } from "@mui/material";
-import Input from "../input/index.jsx";
+import { Grid, Typography } from "@mui/material";
+import Input from "src/components/input";
 import { useState } from "react";
-import ListItem from "../listItem/index.jsx";
-import Filter from "../filter/index.jsx";
+import ListItem from "src/components/listItem";
+import Filter from "src/components/filter";
 
 const ToDoList = () => {
   const [tasks, setTasks] = useState([]);
   const [search, setSearch] = useState("");
+  const [isCheck, setCheck] = useState(false);
 
-  const addTodo = (value) => {
-    setTasks([...tasks, { text: value, id: Date.now() }]);
-    setSearch("");
+  const handleChange = (e) => {
+    const updatedList = tasks.map((task) => {
+      if (task.id === e.id) {
+        task.check = !e.check;
+        setCheck(e.check);
+      }
+      return task;
+    });
+    setTasks(updatedList);
   };
 
-  const deleteTodo = (e) => {
+  const addTodo = (value) => {
+    if (value) {
+      setTasks([...tasks, { text: value, id: Date.now(), check: isCheck }]);
+    }
+  };
+
+  const deleteTodo = (key) => {
     const updateTodo = tasks.filter((item, index) => {
-      return index !== e;
+      return index !== key;
     });
     setTasks(updateTodo);
   };
 
   const handleUpdateText = (id, text) => {
-    const updatedList = tasks.map((e) => {
-      if (e.id === id) {
-        e.text = text;
+    const updatedList = tasks.map((task) => {
+      if (task.id === id) {
+        task.text = text;
       }
-      return e;
+      return task;
     });
     setTasks(updatedList);
   };
 
-  const onSearch = (e) => {
-    setSearch(e.target.value);
+  const onSearch = (task) => {
+    setSearch(task.target.value);
   };
 
   const filteredTasks = tasks.filter((task) => {
@@ -39,8 +52,8 @@ const ToDoList = () => {
   });
 
   return (
-    <div style={{ display: "grid", gap: 40 }}>
-      <Typography variant="h4" marginBlockStart="30px">
+    <Grid container direction="column" gap="40px">
+      <Typography variant="h4" mt="30px">
         ToDo-List
       </Typography>
       <Filter onSearch={onSearch} />
@@ -53,9 +66,11 @@ const ToDoList = () => {
           onClickIcon={(id, text) => {
             handleUpdateText(id, text);
           }}
+          isCheck={task.check}
+          handleChange={handleChange}
         />
       ))}
-    </div>
+    </Grid>
   );
 };
 

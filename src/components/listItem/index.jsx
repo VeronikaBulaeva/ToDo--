@@ -4,41 +4,41 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useState } from "react";
-import Input from "../input/index.jsx";
+import Input from "src/components/input";
+import { FormGroup } from "@mui/material";
 
-const ListItem = ({ task, onClick, onClickIcon }) => {
-  const [isCheck, setCheck] = useState(false);
+const ListItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
   const [isEditing, setIsEditing] = useState(false);
-
-  const handleChange = (e) => {
-    setCheck(e.target.checked);
-  };
 
   const handleEditing = (value) => {
     setIsEditing(value);
   };
 
   return (
-    <div>
+    <>
       {isEditing ? (
         <Input
+          mt="30px"
           value={task.text}
           onClickIcon={(text) => {
             onClickIcon(task.id, text);
+            handleEditing(false);
           }}
           onClickCancel={() => {
             handleEditing(false);
           }}
         />
       ) : (
-        <>
+        <FormGroup row>
           <FormControlLabel
             sx={{ textDecoration: isCheck ? "line-through" : "none" }}
             control={
               <Checkbox
                 name="react"
                 checked={isCheck}
-                onChange={handleChange}
+                onChange={() => {
+                  handleChange(task);
+                }}
               />
             }
             label={task.text}
@@ -55,9 +55,9 @@ const ListItem = ({ task, onClick, onClickIcon }) => {
           <IconButton type="button" sx={{ p: "10px" }} onClick={onClick}>
             <DeleteIcon />
           </IconButton>
-        </>
+        </FormGroup>
       )}
-    </div>
+    </>
   );
 };
 
