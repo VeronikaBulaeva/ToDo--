@@ -1,15 +1,14 @@
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import { debounce } from "src/components/debouce.js";
-import * as React from "react";
-import { useSetSearch } from "src/components/Context.jsx";
+import { useSetSearch } from "src/components/FilterContext";
 
 const Filter = () => {
   const setSearch = useSetSearch();
 
-  const onSearch = (task) => {
+  const onSearch = debounce((task) => {
     setSearch(task.target.value);
-  };
+  });
 
   return (
     <Paper
@@ -22,7 +21,7 @@ const Filter = () => {
       <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder="Filter"
-        onChange={debounce(onSearch)}
+        onChange={onSearch}
       />
     </Paper>
   );

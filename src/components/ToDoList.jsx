@@ -1,7 +1,8 @@
-import { Grid, Typography } from "@mui/material";
-import React from "react";
+import { Grid } from "@mui/material";
+import { useCallback } from "react";
 import ToDoItem from "src/components/ToDoItem.jsx";
-import { useSearch, useSetTasks, useTasks } from "src/components/Context.jsx";
+import { useSetTasks, useTasks } from "src/components/TasksContext.jsx";
+import { useSearch } from "src/components/FilterContext";
 
 const ToDoList = ({ children }) => {
   const tasks = useTasks();
@@ -19,8 +20,8 @@ const ToDoList = ({ children }) => {
   };
 
   const deleteTodo = (key) => {
-    const updateTodo = tasks.filter((item, index) => {
-      return index !== key;
+    const updateTodo = tasks.filter((item) => {
+      return item.id !== key;
     });
     setTasks(updateTodo);
   };
@@ -35,26 +36,25 @@ const ToDoList = ({ children }) => {
     setTasks(updatedList);
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    return task.text.toLowerCase().includes(search.toLowerCase());
-  });
+  const filteredTasks = useCallback(
+    () =>
+      tasks.filter((task) =>
+        task.text.toLowerCase().includes(search.toLowerCase()),
+      ),
+    [tasks, search],
+  );
 
   return (
     <Grid container direction="column" gap={5}>
-      <Typography variant="h4" mt={4}>
-        ToDo-List
-      </Typography>
       {children}
-      {filteredTasks.map((task, index) => (
+      {filteredTasks().map((task) => (
         <ToDoItem
           task={task}
           key={task.id}
-          onClick={() => {
-            deleteTodo(index);
+          onClickDelete={() => {
+            deleteTodo(task.id);
           }}
-          onClickIcon={(id, text) => {
-            handleUpdateText(id, text);
-          }}
+          onClickIconSave={handleUpdateText}
           isCheck={task.check}
           handleChange={handleChange}
         />

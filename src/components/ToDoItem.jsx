@@ -4,10 +4,16 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useState } from "react";
-import Input from "src/components/Input.jsx";
+import ToDoInput from "src/components/ToDoInput.jsx";
 import { FormGroup } from "@mui/material";
 
-const ToDoItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
+const ToDoItem = ({
+  task,
+  onClickDelete,
+  onClickIconSave,
+  isCheck,
+  handleChange,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditing = (value) => {
@@ -17,11 +23,11 @@ const ToDoItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
   return (
     <>
       {isEditing ? (
-        <Input
+        <ToDoInput
           mt={30}
           value={task.text}
-          onClickIcon={(text) => {
-            onClickIcon(task.id, text);
+          onClickIconSave={(text) => {
+            onClickIconSave(task.id, text);
             handleEditing(false);
           }}
           onClickCancel={() => {
@@ -52,7 +58,7 @@ const ToDoItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
           >
             <EditOutlinedIcon />
           </IconButton>
-          <IconButton type="button" sx={{ p: 1.5 }} onClick={onClick}>
+          <IconButton type="button" sx={{ p: 1.5 }} onClick={onClickDelete}>
             <DeleteIcon />
           </IconButton>
         </FormGroup>

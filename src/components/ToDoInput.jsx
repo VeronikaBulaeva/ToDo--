@@ -4,10 +4,10 @@ import IconButton from "@mui/material/IconButton";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import React, { useEffect, useRef } from "react";
-import { useSetTasks } from "./Context.jsx";
+import { useCallback, useEffect, useRef } from "react";
+import { useSetTasks } from "src/components/TasksContext.jsx";
 
-const Input = ({ onClickIcon, onClickCancel, value }) => {
+const ToDoInput = ({ onClickIconSave, onClickCancel, value }) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -16,9 +16,9 @@ const Input = ({ onClickIcon, onClickCancel, value }) => {
     }
   }, []);
 
-  const clearInput = () => {
+  const clearInput = useCallback(() => {
     ref.current.value = "";
-  };
+  }, []);
 
   const setTasks = useSetTasks();
 
@@ -32,8 +32,8 @@ const Input = ({ onClickIcon, onClickCancel, value }) => {
   };
 
   const onClickAdd = () => {
-    if (onClickIcon) {
-      onClickIcon(ref.current.value);
+    if (onClickIconSave) {
+      onClickIconSave(ref.current.value);
     }
     if (!value) {
       addTodo(ref.current.value);
@@ -83,4 +83,4 @@ const Input = ({ onClickIcon, onClickCancel, value }) => {
   );
 };
 
-export default Input;
+export default ToDoInput;
