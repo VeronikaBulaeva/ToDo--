@@ -4,7 +4,8 @@ import IconButton from "@mui/material/IconButton";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { useSetTasks } from "./Context.jsx";
 
 const Input = ({ onClickIcon, onClickCancel, value }) => {
   const ref = useRef(null);
@@ -19,9 +20,23 @@ const Input = ({ onClickIcon, onClickCancel, value }) => {
     ref.current.value = "";
   };
 
+  const setTasks = useSetTasks();
+
+  const addTodo = (value) => {
+    if (value) {
+      setTasks((prevState) => [
+        ...prevState,
+        { text: value, id: Date.now(), check: false },
+      ]);
+    }
+  };
+
   const onClickAdd = () => {
-    onClickIcon(ref.current.value);
+    if (onClickIcon) {
+      onClickIcon(ref.current.value);
+    }
     if (!value) {
+      addTodo(ref.current.value);
       clearInput();
     }
   };
@@ -29,10 +44,8 @@ const Input = ({ onClickIcon, onClickCancel, value }) => {
   return (
     <Paper
       sx={{
-        px: "2px",
-        pt: "4px",
+        pt: 0.5,
         display: "flex",
-        alignItems: "center",
         width: 400,
       }}
     >
@@ -50,7 +63,7 @@ const Input = ({ onClickIcon, onClickCancel, value }) => {
       />
       <IconButton
         type="button"
-        sx={{ p: "10px" }}
+        sx={{ p: 1.5 }}
         onClick={() => {
           onClickAdd();
         }}
@@ -59,7 +72,7 @@ const Input = ({ onClickIcon, onClickCancel, value }) => {
       </IconButton>
       <IconButton
         type="button"
-        sx={{ p: "10px" }}
+        sx={{ p: 1.5 }}
         onClick={() => {
           onClickCancel ? onClickCancel() : clearInput();
         }}

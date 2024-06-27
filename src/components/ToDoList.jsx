@@ -1,29 +1,21 @@
 import { Grid, Typography } from "@mui/material";
-import Input from "src/components/input";
-import { useState } from "react";
-import ListItem from "src/components/listItem";
-import Filter from "src/components/filter";
+import React from "react";
+import ToDoItem from "src/components/ToDoItem.jsx";
+import { useSearch, useSetTasks, useTasks } from "src/components/Context.jsx";
 
-const ToDoList = () => {
-  const [tasks, setTasks] = useState([]);
-  const [search, setSearch] = useState("");
-  const [isCheck, setCheck] = useState(false);
+const ToDoList = ({ children }) => {
+  const tasks = useTasks();
+  const setTasks = useSetTasks();
+  const search = useSearch();
 
   const handleChange = (e) => {
     const updatedList = tasks.map((task) => {
       if (task.id === e.id) {
         task.check = !e.check;
-        setCheck(e.check);
       }
       return task;
     });
     setTasks(updatedList);
-  };
-
-  const addTodo = (value) => {
-    if (value) {
-      setTasks([...tasks, { text: value, id: Date.now(), check: isCheck }]);
-    }
   };
 
   const deleteTodo = (key) => {
@@ -43,26 +35,23 @@ const ToDoList = () => {
     setTasks(updatedList);
   };
 
-  const onSearch = (task) => {
-    setSearch(task.target.value);
-  };
-
   const filteredTasks = tasks.filter((task) => {
     return task.text.toLowerCase().includes(search.toLowerCase());
   });
 
   return (
-    <Grid container direction="column" gap="40px">
-      <Typography variant="h4" mt="30px">
+    <Grid container direction="column" gap={5}>
+      <Typography variant="h4" mt={4}>
         ToDo-List
       </Typography>
-      <Filter onSearch={onSearch} />
-      <Input onClickIcon={addTodo} />
+      {children}
       {filteredTasks.map((task, index) => (
-        <ListItem
+        <ToDoItem
           task={task}
-          key={`${task.text}${task.id}`}
-          onClick={() => deleteTodo(index)}
+          key={task.id}
+          onClick={() => {
+            deleteTodo(index);
+          }}
           onClickIcon={(id, text) => {
             handleUpdateText(id, text);
           }}

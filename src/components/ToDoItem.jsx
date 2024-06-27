@@ -4,10 +4,10 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useState } from "react";
-import Input from "src/components/input";
+import Input from "src/components/Input.jsx";
 import { FormGroup } from "@mui/material";
 
-const ListItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
+const ToDoItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditing = (value) => {
@@ -18,7 +18,7 @@ const ListItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
     <>
       {isEditing ? (
         <Input
-          mt="30px"
+          mt={30}
           value={task.text}
           onClickIcon={(text) => {
             onClickIcon(task.id, text);
@@ -45,14 +45,14 @@ const ListItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
           />
           <IconButton
             type="button"
-            sx={{ p: "10px" }}
+            sx={{ p: 1.5 }}
             onClick={() => {
               handleEditing(true);
             }}
           >
             <EditOutlinedIcon />
           </IconButton>
-          <IconButton type="button" sx={{ p: "10px" }} onClick={onClick}>
+          <IconButton type="button" sx={{ p: 1.5 }} onClick={onClick}>
             <DeleteIcon />
           </IconButton>
         </FormGroup>
@@ -61,4 +61,4 @@ const ListItem = ({ task, onClick, onClickIcon, isCheck, handleChange }) => {
   );
 };
 
-export default ListItem;
+export default ToDoItem;
