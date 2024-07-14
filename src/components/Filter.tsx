@@ -1,13 +1,14 @@
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
-import { debounce } from "src/components/debouce.js";
-import { useSetSearch } from "src/components/FilterContext";
+import { debounce } from "@/components/debouce";
+import { useAppDispatch } from "@/store/hooks";
+import { setFilter } from "@/store/toDoSlice";
 
 const Filter = () => {
-  const setSearch = useSetSearch();
+  const dispatch = useAppDispatch();
 
   const onSearch = debounce((task) => {
-    setSearch(task.target.value);
+    dispatch(setFilter(task.target.value));
   });
 
   return (
@@ -16,6 +17,7 @@ const Filter = () => {
       sx={{
         pt: 0.5,
         width: 400,
+        mt: 2,
       }}
     >
       <InputBase

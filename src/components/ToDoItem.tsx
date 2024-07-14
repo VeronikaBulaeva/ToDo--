@@ -3,11 +3,12 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { useState } from "react";
-import ToDoInput from "src/components/ToDoInput.jsx";
+import { FC, useState } from "react";
 import { FormGroup } from "@mui/material";
+import ToDoInput from "@/components/ToDoInput";
+import { ToDoItemProps } from "@/components/types";
 
-const ToDoItem = ({
+const ToDoItem: FC<ToDoItemProps> = ({
   task,
   onClickDelete,
   onClickIconSave,
@@ -16,7 +17,7 @@ const ToDoItem = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleEditing = (value) => {
+  const handleEditing = (value: boolean) => {
     setIsEditing(value);
   };
 
@@ -24,9 +25,8 @@ const ToDoItem = ({
     <>
       {isEditing ? (
         <ToDoInput
-          mt={30}
           value={task.text}
-          onClickIconSave={(text) => {
+          onClickIconSave={(text: string) => {
             onClickIconSave(task.id, text);
             handleEditing(false);
           }}
