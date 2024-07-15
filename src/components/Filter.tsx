@@ -1,6 +1,6 @@
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
-import { debounce } from "@/components/debouce";
+import { debounce } from "@/utils/debouce";
 import { useAppDispatch } from "@/store/hooks";
 import { setFilter } from "@/store/toDoSlice";
 
