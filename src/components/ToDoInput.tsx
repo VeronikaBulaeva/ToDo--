@@ -4,38 +4,42 @@ import IconButton from "@mui/material/IconButton";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import { useCallback, useEffect, useRef } from "react";
-import { useSetTasks } from "src/components/TasksContext.jsx";
+import { FC, useCallback, useEffect, useRef } from "react";
+import { ToDoInputType } from "@/components/types";
+import { useAppDispatch } from "@/store/hooks";
+import { addToDo } from "@/store/toDoSlice";
 
-const ToDoInput = ({ onClickIconSave, onClickCancel, value }) => {
-  const ref = useRef(null);
+const ToDoInput: FC<ToDoInputType> = ({
+  onClickIconSave,
+  onClickCancel,
+  value,
+}) => {
+  const ref = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (value) {
+    if (value && ref.current) {
       ref.current.value = value;
     }
   }, []);
 
   const clearInput = useCallback(() => {
-    ref.current.value = "";
+    if (ref.current) {
+      ref.current.value = "";
+    }
   }, []);
 
-  const setTasks = useSetTasks();
-
-  const addTodo = (value) => {
+  const addTodo = (value: string) => {
     if (value) {
-      setTasks((prevState) => [
-        ...prevState,
-        { text: value, id: Date.now(), check: false },
-      ]);
+      dispatch(addToDo({ text: value, id: Date.now(), check: false }));
     }
   };
 
   const onClickAdd = () => {
-    if (onClickIconSave) {
+    if (onClickIconSave && ref.current) {
       onClickIconSave(ref.current.value);
     }
-    if (!value) {
+    if (!value && ref.current) {
       addTodo(ref.current.value);
       clearInput();
     }
@@ -45,6 +49,7 @@ const ToDoInput = ({ onClickIconSave, onClickCancel, value }) => {
     <Paper
       sx={{
         pt: 0.5,
+        mt: 2,
         display: "flex",
         width: 400,
       }}
