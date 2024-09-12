@@ -1,1 +1,1 @@
-https://stackblitz.com/github/VeronikaBulaeva/ToDo--
+Посмотреть проект: https://stackblitz.com/github/VeronikaBulaeva/ToDo--
